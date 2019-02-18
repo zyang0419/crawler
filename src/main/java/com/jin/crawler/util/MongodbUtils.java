@@ -1,5 +1,6 @@
 package com.jin.crawler.util;
 
+import java.util.Date;
 import java.util.List;
  
 import javax.annotation.PostConstruct;
@@ -320,4 +321,30 @@ public class MongodbUtils {
 		List<? extends Object> resultList = mongodbUtils.mongoTemplate.findAll(obj.getClass(), collectionName);
 		return resultList;
 	}
+
+	/**
+	 *
+	 *根据创建时间段查询 查询出结果集
+	 *@author Xingheng.Zhang
+	 *@date 2018-12-10 11:19
+	 *@param
+	 *@return
+	 */
+	public static List<? extends Object> findAllByCreateTime(Date startTime, Date endTime, String[] findKeys, Object[] findValues, Object object) {
+		Criteria criteria = Criteria
+				.where("createTime").gte(startTime)
+				.lte(endTime);
+		if(null != findKeys && null != findValues){
+			for (int i = 0; i < findKeys.length; i++) {
+				criteria.and(findKeys[i]).is(findValues[i]);
+			}
+		}
+		Query query = new Query(criteria);
+		List<? extends Object> resultList = mongodbUtils.mongoTemplate.find(query,object.getClass());
+		return resultList;
+	}
+
+
+
+
 }

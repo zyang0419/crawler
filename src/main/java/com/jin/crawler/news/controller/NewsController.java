@@ -2,6 +2,9 @@ package com.jin.crawler.news.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.jin.crawler.blog.entity.Blog;
+import com.jin.crawler.blog.mapper.BlogMapper;
+import com.jin.crawler.blog.service.impl.BlogServiceImpl;
 import com.jin.crawler.news.mapper.NewsMapper;
 import com.jin.crawler.news.service.impl.NewsServiceImpl;
 import com.jin.crawler.postbar.entity.PostBar;
@@ -49,10 +52,16 @@ public class NewsController extends BaseController {
     private PostBarServiceImpl postBarService;
 
     @Autowired
+    private BlogServiceImpl blogService;
+
+    @Autowired
     private ReportMapper reportMapper;
 
     @Autowired
     private PostBarMapper postBarMapper;
+
+    @Autowired
+    private BlogMapper blogMapper;
 
     /**
      *
@@ -71,6 +80,10 @@ public class NewsController extends BaseController {
             /**
              * 获取上一小时内的有效数据
              */
+
+            /**
+             * 迁移爬取的新闻数据到监控数据库
+             */
             List<Report> reportList = reportMapper.selectList(new QueryWrapper<Report>()
                                                 .isNotNull("title")
                                                 .isNotNull("content")
@@ -80,6 +93,10 @@ public class NewsController extends BaseController {
             boolean result = newsService.transferReport(reportList);
             System.out.println("*********transfer report result ========" + result);
             boolean invalidReportResult = reportService.invalidReport(reportList);
+
+            /**
+             * 迁移爬取的贴吧数据到监控数据库
+             */
             List<PostBar> postBarList = postBarMapper.selectList(new QueryWrapper<PostBar>()
                     .isNotNull("title")
                     .isNotNull("content")
@@ -89,6 +106,19 @@ public class NewsController extends BaseController {
             boolean returnValue =  newsService.transferPostBar(postBarList);
             System.out.println("*********transfer report result ========" + returnValue);
             boolean invalidPostBarResult = postBarService.invalidPostBar(postBarList);
+
+            /**
+             * 迁移爬取的新浪博客数据到监控数据库
+             */
+            List<Blog> blogList = blogMapper.selectList(new QueryWrapper<Blog>()
+                    .isNotNull("title")
+                    .isNotNull("content")
+                    .eq("deleted","0")
+                    .between("create_time",startTime,endTime)
+            );
+            boolean returnBlogValue =  newsService.transferBlog(blogList);
+            System.out.println("*********transfer blog result ========" + returnBlogValue);
+            boolean invalidBlogResult = blogService.invalidBlog(blogList);
 
         } catch (Exception e) {
             e.printStackTrace();

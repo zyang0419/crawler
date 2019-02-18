@@ -39,7 +39,7 @@ public class ReportController extends BaseController {
     @Autowired
     private RestTemplate restTemplate;
 
-    
+
     @ApiOperation("爬取搜狗新闻数据")
     @GetMapping("/sogou")
     public String sogou(){

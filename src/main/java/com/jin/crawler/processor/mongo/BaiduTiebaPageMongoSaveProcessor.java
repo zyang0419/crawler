@@ -118,7 +118,6 @@ public class BaiduTiebaPageMongoSaveProcessor implements PageProcessor {
                 /**
                  * 插入前先判断是否已经爬取过
                  */
-//                MongodbUtils.save(postBar);
                 List<PostBarMongo> existList = (List<PostBarMongo>)MongodbUtils.find(postBar,new String[]{"uuid"},new String[]{pid});
                 if(CollectionUtils.isEmpty(existList)){
                     MongodbUtils.save(postBar);

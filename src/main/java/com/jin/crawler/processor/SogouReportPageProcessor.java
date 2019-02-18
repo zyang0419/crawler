@@ -16,7 +16,14 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Selectable;
 
 import java.util.List;
-
+/**
+ *
+ *搜狗新闻搜索引擎爬取
+ *@author Xingheng.Zhang
+ *@date 2018-12-7 15:12
+ *@param
+ *@return
+ */
 public class SogouReportPageProcessor implements PageProcessor {
 
 
@@ -100,7 +107,7 @@ public class SogouReportPageProcessor implements PageProcessor {
                 /**
                  * 判断爬取的内容是否过旧,早于今天5天的都放弃
                  */
-                if(StringUtils.isNotBlank(time) && !DateUtils.inNumDays(ConstantUtils.BEFORE_DAYS,time)){
+                if(StringUtils.isBlank(time) || !DateUtils.inNumDays(ConstantUtils.BEFORE_DAYS,time)){
                     continue;
                 }
                 System.out.println("======================================");

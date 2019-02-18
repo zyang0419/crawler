@@ -17,7 +17,7 @@ public class CrawlerUtils {
      *@author Xingheng.Zhang
      *@date 2018-12-5 14:05
      *@param
-     *@return
+     *@return^
      */
     public static String getParam(String url, String name) {
         String params = url.substring(url.indexOf("?") + 1, url.length());
